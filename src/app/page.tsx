@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Package2 } from 'lucide-react';
+import { LogoCarousel } from '@/components/logo-carousel';
 
 export default function LandingPage() {
   return (
@@ -46,14 +47,10 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-              <img
-                src="https://picsum.photos/seed/promo/600/400"
-                width="600"
-                height="400"
-                alt="Hero"
-                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:order-last"
-                data-ai-hint="dashboard product"
-              />
+              <div className="flex flex-col justify-center items-center space-y-4">
+                <h2 className="text-xl font-semibold text-muted-foreground">Connect with:</h2>
+                <LogoCarousel />
+              </div>
             </div>
           </div>
         </section>
