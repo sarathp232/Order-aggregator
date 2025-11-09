@@ -1,0 +1,61 @@
+import type { Platform } from "./types";
+
+const brandColors: Record<Platform, string> = {
+    "Amazon": "#FF9900",
+    "eBay": "#E53238", // Red
+    "Shopify": "#95BF47",
+    "Walmart": "#0071CE",
+    "Target": "#CC0000",
+    "Best Buy": "#0046BE",
+    "Home Depot": "#F96302",
+    "Lowes": "#004990",
+    "Costco": "#E31837",
+    "Etsy": "#F1641E",
+    "Wayfair": "#60009B",
+    "Overstock": "#004B91",
+    "Newegg": "#FFA500",
+    "Macy's": "#E21A2C",
+    "Nordstrom": "#231F20",
+    "Zappos": "#0076A8",
+    "Kohl's": "#00539F",
+    "Sears": "#004B91",
+    "JCPenney": "#DA291C",
+    "Gap": "#004A99",
+    "Old Navy": "#004B91",
+    "Banana Republic": "#231F20",
+    "H&M": "#E50010",
+    "Zara": "#231F20",
+    "Uniqlo": "#FF0000",
+    "ASOS": "#2D2D2D",
+    "Shein": "#FF66C4",
+    "Temu": "#FF2D55",
+    "AliExpress": "#FF4747",
+    "Wish": "#2FB7EC",
+    "IKEA": "#FFCC00",
+    "Crate & Barrel": "#231F20",
+    "Williams-Sonoma": "#637550",
+    "Pottery Barn": "#746961",
+    "Restoration Hardware": "#A19B95",
+    "Bed Bath & Beyond": "#00AEEF",
+    "GameStop": "#E50000",
+    "Sephora": "#000000",
+    "Ulta": "#FF007F",
+    "Chewy": "#00AEEF",
+    "Petco": "#005A9C",
+    "Petsmart": "#004B91",
+    "REI": "#006A4D",
+    "Dick's Sporting Goods": "#005930",
+    "Lululemon": "#DE0031",
+    "Nike": "#111111",
+    "Adidas": "#000000",
+    "Under Armour": "#231F20",
+    "Puma": "#000000",
+    "CVS": "#CC0000",
+    "Walgreens": "#D21F3C",
+};
+
+const defaultColor = 'hsl(var(--foreground))';
+
+export function getBrandColor(platform: Platform): string {
+    return brandColors[platform] || defaultColor;
+}

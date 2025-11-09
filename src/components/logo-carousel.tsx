@@ -6,6 +6,7 @@ import Autoplay from 'embla-carousel-autoplay';
 import { PlatformIcon } from './platform-icon';
 import type { Platform } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { getBrandColor } from '@/lib/brand-colors';
 
 const platforms: Platform[] = [
     'Amazon', 'eBay', 'Shopify', 'Walmart', 'Target', 'Best Buy', 'Home Depot', 'Lowes', 'Costco',
@@ -18,22 +19,9 @@ const platforms: Platform[] = [
 ];
 
 export function LogoCarousel() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' }, [
+  const [emblaRef] = useEmblaCarousel({ loop: true, align: 'center' }, [
     Autoplay({ delay: 2000, stopOnInteraction: false }),
   ]);
-  const [activeIndex, setActiveIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    if (!emblaApi) return;
-    const onSelect = () => {
-      setActiveIndex(emblaApi.selectedScrollSnap());
-    };
-    emblaApi.on('select', onSelect);
-    onSelect(); 
-    return () => {
-      emblaApi.off('select', onSelect);
-    };
-  }, [emblaApi]);
 
   return (
     <div className="overflow-hidden w-full max-w-4xl" ref={emblaRef}>
@@ -42,19 +30,16 @@ export function LogoCarousel() {
           <div
             key={index}
             className={cn(
-              'flex-shrink-0 flex-grow-0 basis-1/5 min-w-0 flex items-center justify-center transition-opacity duration-300',
-              {
-                'opacity-100 scale-110': index === activeIndex,
-                'opacity-40': index !== activeIndex,
-              }
+              'flex-shrink-0 flex-grow-0 basis-1/5 min-w-0 flex items-center justify-center p-4'
             )}
           >
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center space-y-2">
               <PlatformIcon
                 platform={platform}
-                className="h-16 w-16 text-foreground"
+                className="h-16 w-16"
+                style={{ color: getBrandColor(platform) }}
               />
-               <p className="mt-2 text-lg font-semibold text-foreground">
+               <p className="text-sm font-semibold text-muted-foreground">
                 {platform === 'Shopify' ? 'Shopify Stores' : platform}
               </p>
             </div>
