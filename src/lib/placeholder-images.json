@@ -1,3 +1,40 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "product-1",
+      "description": "A modern wireless keyboard.",
+      "imageUrl": "https://images.unsplash.com/photo-1647073069959-1a3f91c7564d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3aXJlbGVzcyUyMGtleWJvYXJkfGVufDB8fHx8MTc2MjU4NzkwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wireless keyboard"
+    },
+    {
+      "id": "product-2",
+      "description": "An ergonomic wireless mouse.",
+      "imageUrl": "https://images.unsplash.com/photo-1662323861979-0538474387e3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHx3aXJlbGVzcyUyMG1vdXNlfGVufDB8fHx8MTc2MjYyODYzOHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "wireless mouse"
+    },
+    {
+      "id": "product-3",
+      "description": "A high-resolution 27-inch monitor.",
+      "imageUrl": "https://images.unsplash.com/photo-1484788984921-03950022c9ef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxjb21wdXRlciUyMG1vbml0b3J8ZW58MHx8fHwxNzYyNTkwMTQ3fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "computer monitor"
+    },
+    {
+      "id": "product-4",
+      "description": "Noise-cancelling over-ear headphones.",
+      "imageUrl": "https://images.unsplash.com/photo-1545127398-14699f92334b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxoZWFkcGhvbmVzfGVufDB8fHx8MTc2MjY2MzM5NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "headphones"
+    },
+    {
+      "id": "product-5",
+      "description": "A sleek and modern desk lamp.",
+      "imageUrl": "https://images.unsplash.com/photo-1621177555452-bedbe4c28879?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxkZXNrJTIwbGFtcHxlbnwwfHx8fDE3NjI2NjM3OTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "desk lamp"
+    },
+    {
+      "id": "product-6",
+      "description": "A comfortable ergonomic office chair.",
+      "imageUrl": "https://images.unsplash.com/photo-1572521165329-b197f9ea3da6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxvZmZpY2UlMjBjaGFpcnxlbnwwfHx8fDE3NjI2MjY0NzR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "office chair"
+    }
+  ]
 }
