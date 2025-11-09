@@ -3,10 +3,10 @@
 import * as React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
-import { PlatformIcon } from './platform-icon';
 import type { Platform } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { getBrandColor } from '@/lib/brand-colors';
+import { PlatformIcon } from './platform-icon';
 
 const platforms: Platform[] = [
     'Amazon', 'eBay', 'Shopify', 'Walmart', 'Target', 'Best Buy', 'Home Depot', 'Lowes', 'Costco',
@@ -18,13 +18,15 @@ const platforms: Platform[] = [
     'Under Armour', 'Puma', 'CVS', 'Walgreens'
 ];
 
+const platformsWithIcons: Platform[] = ['Amazon', 'eBay', 'Shopify'];
+
 export function LogoCarousel() {
   const [emblaRef] = useEmblaCarousel({ loop: true, align: 'center' }, [
     Autoplay({ delay: 2000, stopOnInteraction: false }),
   ]);
 
   return (
-    <div className="overflow-hidden w-full max-w-4xl" ref={emblaRef}>
+    <div className="overflow-hidden w-full max-w-6xl" ref={emblaRef}>
       <div className="flex">
         {platforms.map((platform, index) => (
           <div
@@ -34,11 +36,20 @@ export function LogoCarousel() {
             )}
           >
             <div className="flex flex-col items-center text-center space-y-2">
-              <PlatformIcon
-                platform={platform}
-                className="h-16 w-16"
-                style={{ color: getBrandColor(platform) }}
-              />
+              {platformsWithIcons.includes(platform) ? (
+                 <PlatformIcon
+                    platform={platform}
+                    className="h-16 w-16"
+                    style={{ color: getBrandColor(platform) }}
+                  />
+              ) : (
+                <div 
+                  className="h-16 w-full flex items-center justify-center font-bold text-xl px-2"
+                  style={{ color: getBrandColor(platform) }}
+                >
+                  {platform}
+                </div>
+              )}
                <p className="text-sm font-semibold text-muted-foreground">
                 {platform === 'Shopify' ? 'Shopify Stores' : platform}
               </p>
