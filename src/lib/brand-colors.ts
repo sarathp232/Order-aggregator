@@ -2,7 +2,7 @@ import type { Platform } from "./types";
 
 const brandColors: Record<Platform, string> = {
     "Amazon": "#FF9900",
-    "eBay": "#E53238", // Red
+    "eBay": "#E53238", // Red from the logo
     "Shopify": "#95BF47",
     "Walmart": "#0071CE",
     "Target": "#CC0000",
@@ -52,6 +52,16 @@ const brandColors: Record<Platform, string> = {
     "Puma": "#000000",
     "CVS": "#CC0000",
     "Walgreens": "#D21F3C",
+    "Flipkart": "#2874F0",
+    "Myntra": "#E13258",
+    "Ajio": "#000000",
+    "Snapdeal": "#E40046",
+    "JioMart": "#00A1E0",
+    "BigBasket": "#84C225",
+    "Nykaa": "#FC2678",
+    "Tata CLiQ": "#000000",
+    "Pepperfry": "#F47B20",
+    "FirstCry": "#FFD600",
 };
 
 const defaultColor = 'hsl(var(--foreground))';

@@ -15,7 +15,8 @@ const platforms: Platform[] = [
     'Temu', 'AliExpress', 'Wish', 'IKEA', 'Crate & Barrel', 'Williams-Sonoma', 'Pottery Barn',
     'Restoration Hardware', 'Bed Bath & Beyond', 'GameStop', 'Sephora', 'Ulta', 'Chewy',
     'Petco', 'Petsmart', 'REI', 'Dick\'s Sporting Goods', 'Lululemon', 'Nike', 'Adidas',
-    'Under Armour', 'Puma', 'CVS', 'Walgreens'
+    'Under Armour', 'Puma', 'CVS', 'Walgreens',
+    'Flipkart', 'Myntra', 'Ajio', 'Snapdeal', 'JioMart', 'BigBasket', 'Nykaa', 'Tata CLiQ', 'Pepperfry', 'FirstCry'
 ];
 
 const platformsWithIcons: Platform[] = ['Amazon', 'eBay', 'Shopify'];

@@ -61,7 +61,18 @@ export type Platform =
   | 'Under Armour'
   | 'Puma'
   | 'CVS'
-  | 'Walgreens';
+  | 'Walgreens'
+  // Indian Retailers
+  | 'Flipkart'
+  | 'Myntra'
+  | 'Ajio'
+  | 'Snapdeal'
+  | 'JioMart'
+  | 'BigBasket'
+  | 'Nykaa'
+  | 'Tata CLiQ'
+  | 'Pepperfry'
+  | 'FirstCry';
 
 
 export type Order = {
