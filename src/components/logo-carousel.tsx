@@ -43,7 +43,7 @@ export function LogoCarousel() {
                     style={{ color: getBrandColor(platform) }}
                   />
               ) : (
-                <div 
+                <div
                   className="h-16 w-full flex items-center justify-center font-bold text-xl px-2"
                   style={{ color: getBrandColor(platform) }}
                 >
