@@ -27,15 +27,15 @@ export default function LandingPage() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-card">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-card">
           <div className="container px-4 md:px-6">
-            <div className="grid gap-12 lg:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_1.2fr]">
-               <div className="flex flex-col justify-center space-y-4">
+            <div className="flex flex-col items-center justify-center space-y-12">
+              <div className="flex flex-col items-center justify-center space-y-4 text-center">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                     All Your Orders, One Simple View
                   </h1>
-                  <p className="max-w-[600px] text-muted-foreground md:text-xl">
+                  <p className="max-w-[700px] text-muted-foreground md:text-xl">
                     Tired of tracking packages across a dozen different sites?
                     Order Aggregator brings all your online purchases into a single,
                     easy-to-use dashboard.
@@ -47,7 +47,7 @@ export default function LandingPage() {
                   </Button>
                 </div>
               </div>
-              <div className="flex flex-col justify-center items-center space-y-4">
+              <div className="flex w-full flex-col justify-center items-center space-y-4">
                 <h2 className="text-xl font-semibold text-muted-foreground">Connect with:</h2>
                 <LogoCarousel />
               </div>
