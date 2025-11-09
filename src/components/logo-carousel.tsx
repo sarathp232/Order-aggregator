@@ -7,11 +7,19 @@ import { PlatformIcon } from './platform-icon';
 import type { Platform } from '@/lib/types';
 import { cn } from '@/lib/utils';
 
-const platforms: Platform[] = ['Amazon', 'eBay', 'Shopify'];
+const platforms: Platform[] = [
+    'Amazon', 'eBay', 'Shopify', 'Walmart', 'Target', 'Best Buy', 'Home Depot', 'Lowes', 'Costco',
+    'Etsy', 'Wayfair', 'Overstock', 'Newegg', 'Macy\'s', 'Nordstrom', 'Zappos', 'Kohl\'s', 'Sears',
+    'JCPenney', 'Gap', 'Old Navy', 'Banana Republic', 'H&M', 'Zara', 'Uniqlo', 'ASOS', 'Shein',
+    'Temu', 'AliExpress', 'Wish', 'IKEA', 'Crate & Barrel', 'Williams-Sonoma', 'Pottery Barn',
+    'Restoration Hardware', 'Bed Bath & Beyond', 'GameStop', 'Sephora', 'Ulta', 'Chewy',
+    'Petco', 'Petsmart', 'REI', 'Dick\'s Sporting Goods', 'Lululemon', 'Nike', 'Adidas',
+    'Under Armour', 'Puma', 'CVS', 'Walgreens'
+];
 
 export function LogoCarousel() {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' }, [
-    Autoplay({ delay: 3000, stopOnInteraction: false }),
+    Autoplay({ delay: 2000, stopOnInteraction: false }),
   ]);
   const [activeIndex, setActiveIndex] = React.useState(0);
 
@@ -28,7 +36,7 @@ export function LogoCarousel() {
   }, [emblaApi]);
 
   return (
-    <div className="overflow-hidden" ref={emblaRef}>
+    <div className="overflow-hidden w-full max-w-lg" ref={emblaRef}>
       <div className="flex">
         {platforms.map((platform, index) => (
           <div
