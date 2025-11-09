@@ -36,16 +36,16 @@ export function LogoCarousel() {
   }, [emblaApi]);
 
   return (
-    <div className="overflow-hidden w-full max-w-lg" ref={emblaRef}>
+    <div className="overflow-hidden w-full max-w-4xl" ref={emblaRef}>
       <div className="flex">
         {platforms.map((platform, index) => (
           <div
             key={index}
             className={cn(
-              'flex-shrink-0 flex-grow-0 basis-1/3 min-w-0 flex items-center justify-center transition-opacity duration-300',
+              'flex-shrink-0 flex-grow-0 basis-1/5 min-w-0 flex items-center justify-center transition-opacity duration-300',
               {
-                'opacity-100': index === activeIndex,
-                'opacity-30': index !== activeIndex,
+                'opacity-100 scale-110': index === activeIndex,
+                'opacity-40': index !== activeIndex,
               }
             )}
           >
@@ -54,7 +54,7 @@ export function LogoCarousel() {
                 platform={platform}
                 className="h-16 w-16 text-foreground"
               />
-               <p className="mt-2 text-xl font-semibold text-foreground">
+               <p className="mt-2 text-lg font-semibold text-foreground">
                 {platform === 'Shopify' ? 'Shopify Stores' : platform}
               </p>
             </div>
