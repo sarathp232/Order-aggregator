@@ -2,8 +2,7 @@
 "use client";
 
 import * as React from 'react';
-import { getDeduplicatedOrders } from '@/app/actions';
-import { mockOrders } from '@/lib/mock-data';
+import { fetchOrdersForPlatform, getDeduplicatedOrders } from '@/app/actions';
 import type { Order, Platform } from '@/lib/types';
 import { Header } from '@/components/header';
 import { OrderFilters } from '@/components/order-filters';
@@ -40,10 +39,11 @@ export default function OrderDashboard() {
 
   const [useAIDeduplication, setUseAIDeduplication] = React.useState(true);
 
-  const handleAccountLinked = (platform: Platform) => {
+  const handleAccountLinked = async (platform: Platform) => {
     if (linkedPlatforms.includes(platform)) return;
 
-    const newOrders = mockOrders.filter(order => order.platform === platform);
+    setIsLoading(true);
+    const newOrders = await fetchOrdersForPlatform(platform);
     
     setAllOrders(prev => {
       // Prevent adding duplicate orders if this function is somehow called twice
@@ -53,6 +53,7 @@ export default function OrderDashboard() {
     });
 
     setLinkedPlatforms(prev => [...prev, platform]);
+    setIsLoading(false);
   };
   
   React.useEffect(() => {
@@ -124,7 +125,7 @@ export default function OrderDashboard() {
           isDeduplicating={isDeduplicating}
           linkedPlatforms={linkedPlatforms}
         />
-         {linkedPlatforms.length === 0 ? (
+         {linkedPlatforms.length === 0 && !isLoading ? (
           <div className="col-span-full text-center text-muted-foreground py-12 flex flex-col items-center justify-center border-2 border-dashed rounded-lg">
             <h3 className="text-2xl font-semibold mb-2">Your Dashboard is Empty</h3>
             <p className="mb-4">Link a shopping account to see your orders.</p>
@@ -135,18 +136,19 @@ export default function OrderDashboard() {
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4">
-            {isLoading || isDeduplicating ? (
-              Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[150px] rounded-lg" />)
+            {isLoading ? (
+              Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-[150px] rounded-lg" />)
             ) : filteredAndSortedOrders.length > 0 ? (
               filteredAndSortedOrders.map(order => (
                 <OrderCard key={order.id} order={order} onSelectOrder={handleSelectOrder} />
               ))
             ) : (
-              <div className="col-span-full text-center text-muted-foreground py-12">
+              !isDeduplicating && <div className="col-span-full text-center text-muted-foreground py-12">
                 <h3 className="text-xl font-semibold">No Orders Found</h3>
                 <p>Try adjusting your filters or linking another account.</p>
               </div>
             )}
+            { isDeduplicating && Array.from({ length: filteredAndSortedOrders.length || 8 }).map((_, i) => <Skeleton key={i} className="h-[150px] rounded-lg" />) }
           </div>
         )}
       </main>
@@ -162,7 +164,7 @@ export default function OrderDashboard() {
         <OrderDetails
           order={selectedOrder}
           isOpen={isDetailsOpen}
-          onOpenChange={setIsDetailsOpen}
+          onOpenchange={setIsDetailsOpen}
         />
       )}
     </div>
