@@ -4,15 +4,12 @@
 import * as React from 'react';
 import { Package2, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { AccountLinkingModal } from '@/components/account-linking-modal';
-import type { Platform } from '@/lib/types';
 
 interface HeaderProps {
-    onAccountLinked: (platform: Platform) => void;
+    onLinkAccountClick: () => void;
 }
 
-export function Header({ onAccountLinked }: HeaderProps) {
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+export function Header({ onLinkAccountClick }: HeaderProps) {
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6 z-10">
@@ -25,18 +22,13 @@ export function Header({ onAccountLinked }: HeaderProps) {
             <span>Order Aggregator</span>
           </a>
           <div className="ml-auto">
-            <Button onClick={() => setIsModalOpen(true)}>
+            <Button onClick={onLinkAccountClick}>
               <PlusCircle className="mr-2 h-4 w-4" />
               Link Account
             </Button>
           </div>
         </nav>
       </header>
-      <AccountLinkingModal 
-        isOpen={isModalOpen} 
-        onOpenChange={setIsModalOpen}
-        onAccountLinked={onAccountLinked}
-      />
     </>
   );
 }

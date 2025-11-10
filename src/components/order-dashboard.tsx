@@ -11,6 +11,8 @@ import { OrderCard } from '@/components/order-card';
 import { OrderDetails } from '@/components/order-details';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { AccountLinkingModal } from './account-linking-modal';
+import { PlusCircle } from 'lucide-react';
 
 type SortKey = 'orderDate' | 'status';
 type SortDirection = 'asc' | 'desc';
@@ -22,6 +24,7 @@ export default function OrderDashboard() {
   const [isDeduplicating, setIsDeduplicating] = React.useState(false);
   const [selectedOrder, setSelectedOrder] = React.useState<Order | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const [filters, setFilters] = React.useState<{ status: string; platform: string; date: Date | undefined }>({
     status: 'All',
@@ -101,7 +104,7 @@ export default function OrderDashboard() {
 
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <Header onAccountLinked={handleAccountLinked} />
+      <Header onLinkAccountClick={() => setIsModalOpen(true)} />
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <OrderFilters
           filters={filters}
@@ -119,7 +122,10 @@ export default function OrderDashboard() {
           <div className="col-span-full text-center text-muted-foreground py-12 flex flex-col items-center justify-center border-2 border-dashed rounded-lg">
             <h3 className="text-2xl font-semibold mb-2">Your Dashboard is Empty</h3>
             <p className="mb-4">Link a shopping account to see your orders.</p>
-            {/* The Header component already contains the button, so we don't need another one here. */}
+            <Button onClick={() => setIsModalOpen(true)}>
+                <PlusCircle className="mr-2 h-4 w-4" />
+                Link Your First Account
+            </Button>
           </div>
         ) : (
           <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-4">
@@ -138,6 +144,13 @@ export default function OrderDashboard() {
           </div>
         )}
       </main>
+
+      <AccountLinkingModal 
+        isOpen={isModalOpen} 
+        onOpenChange={setIsModalOpen}
+        onAccountLinked={handleAccountLinked}
+      />
+
       {selectedOrder && (
         <OrderDetails
           order={selectedOrder}
