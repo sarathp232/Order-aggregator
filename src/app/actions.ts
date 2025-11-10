@@ -1,31 +1,31 @@
-
 'use server';
 
 import {
   deduplicateOrders,
   type DeduplicateOrdersInput,
 } from '@/ai/flows/deduplicate-orders';
-import { mockOrders } from '@/lib/mock-data';
+import { generateSampleOrders } from '@/ai/flows/generate-sample-orders';
 import type { Order, Platform } from '@/lib/types';
 
 /**
- * Simulates fetching orders for a specific platform from a remote server.
+ * Simulates fetching orders for a specific platform by calling an AI flow to generate them.
  * Includes an artificial delay to mimic network latency.
  * @param platform The e-commerce platform to fetch orders for.
  * @returns A promise that resolves to an array of orders.
  */
 export async function fetchOrdersForPlatform(platform: Platform): Promise<Order[]> {
-  console.log(`Fetching orders for ${platform}...`);
+  console.log(`Generating sample orders for ${platform} using AI...`);
   
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 1000));
-  
-  const platformOrders = mockOrders.filter(order => order.platform === platform);
-  
-  console.log(`Found ${platformOrders.length} orders for ${platform}.`);
-  return platformOrders;
+  try {
+    const newOrders = await generateSampleOrders(platform);
+    console.log(`Generated ${newOrders.length} orders for ${platform}.`);
+    return newOrders;
+  } catch (error) {
+    console.error(`Error generating sample orders for ${platform}:`, error);
+    // Return an empty array on error to prevent the app from crashing.
+    return [];
+  }
 }
-
 
 export async function getDeduplicatedOrders(orders: Order[]): Promise<Order[]> {
   // If there are no orders or only one, no need to call the AI

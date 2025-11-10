@@ -11,7 +11,7 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-const OrderSchema = z.object({
+export const OrderSchema = z.object({
   orderId: z.string().describe('The unique identifier for the order.'),
   platform: z.string().describe('The platform where the order was placed (e.g., Amazon, eBay).'),
   orderDate: z.string().describe('The date the order was placed in ISO format (YYYY-MM-DD).'),
