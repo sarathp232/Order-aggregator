@@ -28,9 +28,10 @@ interface AccountLinkingModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
   onAccountLinked: (platform: Platform) => void;
+  linkedPlatforms: Platform[];
 }
 
-const platforms: Platform[] = [
+const allPlatforms: Platform[] = [
   'Amazon',
   'eBay',
   'Shopify',
@@ -39,7 +40,7 @@ const platforms: Platform[] = [
   'Tata CLiQ',
 ];
 
-export function AccountLinkingModal({ isOpen, onOpenChange, onAccountLinked }: AccountLinkingModalProps) {
+export function AccountLinkingModal({ isOpen, onOpenChange, onAccountLinked, linkedPlatforms }: AccountLinkingModalProps) {
   const { toast } = useToast();
   const [platform, setPlatform] = React.useState<Platform | ''>('');
 
@@ -64,6 +65,8 @@ export function AccountLinkingModal({ isOpen, onOpenChange, onAccountLinked }: A
     onOpenChange(false);
     setPlatform('');
   };
+  
+  const availablePlatforms = allPlatforms.filter(p => !linkedPlatforms.includes(p));
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -80,12 +83,12 @@ export function AccountLinkingModal({ isOpen, onOpenChange, onAccountLinked }: A
               <Label htmlFor="platform" className="text-right">
                 Platform
               </Label>
-              <Select value={platform} onValueChange={(value) => setPlatform(value as Platform)}>
+              <Select value={platform} onValueChange={(value) => setPlatform(value as Platform)} disabled={availablePlatforms.length === 0}>
                 <SelectTrigger id="platform" className="col-span-3">
-                  <SelectValue placeholder="Select a platform" />
+                  <SelectValue placeholder={availablePlatforms.length > 0 ? "Select a platform" : "All accounts linked"} />
                 </SelectTrigger>
                 <SelectContent>
-                  {platforms.map((p) => (
+                  {availablePlatforms.map((p) => (
                      <SelectItem key={p} value={p}>
                         <div className="flex items-center gap-2">
                           <PlatformIcon platform={p} className="h-4 w-4" /> {p}
@@ -109,7 +112,7 @@ export function AccountLinkingModal({ isOpen, onOpenChange, onAccountLinked }: A
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" variant="default">Link Account</Button>
+            <Button type="submit" variant="default" disabled={availablePlatforms.length === 0}>Link Account</Button>
           </DialogFooter>
         </form>
       </DialogContent>

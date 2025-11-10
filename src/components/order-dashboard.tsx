@@ -19,6 +19,7 @@ type SortDirection = 'asc' | 'desc';
 
 export default function OrderDashboard() {
   const [allOrders, setAllOrders] = React.useState<Order[]>([]);
+  const [processedOrders, setProcessedOrders] = React.useState<Order[]>([]);
   const [linkedPlatforms, setLinkedPlatforms] = React.useState<Platform[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeduplicating, setIsDeduplicating] = React.useState(false);
@@ -40,33 +41,38 @@ export default function OrderDashboard() {
   const [useAIDeduplication, setUseAIDeduplication] = React.useState(true);
 
   const handleAccountLinked = (platform: Platform) => {
-    if (!linkedPlatforms.includes(platform)) {
-      setLinkedPlatforms(prev => [...prev, platform]);
-    }
+    if (linkedPlatforms.includes(platform)) return;
+
+    const newOrders = mockOrders.filter(order => order.platform === platform);
+    
+    setAllOrders(prev => {
+      // Prevent adding duplicate orders if this function is somehow called twice
+      const existingOrderIds = new Set(prev.map(o => o.id));
+      const ordersToAdd = newOrders.filter(o => !existingOrderIds.has(o.id));
+      return [...prev, ...ordersToAdd];
+    });
+
+    setLinkedPlatforms(prev => [...prev, platform]);
   };
-
-  const visibleOrders = React.useMemo(() => {
-    return mockOrders.filter(order => linkedPlatforms.includes(order.platform));
-  }, [linkedPlatforms]);
-
+  
   React.useEffect(() => {
     const processOrders = async () => {
-      if (visibleOrders.length === 0) {
-        setAllOrders([]);
+      if (allOrders.length === 0) {
+        setProcessedOrders([]);
         return;
       }
 
       if (useAIDeduplication) {
         setIsDeduplicating(true);
-        const deduplicated = await getDeduplicatedOrders(visibleOrders);
-        setAllOrders(deduplicated);
+        const deduplicated = await getDeduplicatedOrders(allOrders);
+        setProcessedOrders(deduplicated);
         setIsDeduplicating(false);
       } else {
-        setAllOrders(visibleOrders);
+        setProcessedOrders(allOrders);
       }
     };
     processOrders();
-  }, [visibleOrders, useAIDeduplication]);
+  }, [allOrders, useAIDeduplication]);
 
   const handleSelectOrder = (order: Order) => {
     setSelectedOrder(order);
@@ -74,7 +80,7 @@ export default function OrderDashboard() {
   };
 
   const filteredAndSortedOrders = React.useMemo(() => {
-    let filtered = allOrders;
+    let filtered = processedOrders;
 
     if (filters.status !== 'All') {
       filtered = filtered.filter(order => order.status === filters.status);
@@ -100,7 +106,7 @@ export default function OrderDashboard() {
       }
       return direction === 'desc' ? comparison * -1 : comparison;
     });
-  }, [allOrders, filters, sorting]);
+  }, [processedOrders, filters, sorting]);
 
   return (
     <div className="flex min-h-screen w-full flex-col">
@@ -113,8 +119,8 @@ export default function OrderDashboard() {
           onSortingChange={setSorting}
           showRawData={!useAIDeduplication}
           onShowRawDataChange={(checked) => setUseAIDeduplication(!checked)}
-          rawCount={visibleOrders.length}
-          dedupedCount={allOrders.length}
+          rawCount={allOrders.length}
+          dedupedCount={processedOrders.length}
           isDeduplicating={isDeduplicating}
           linkedPlatforms={linkedPlatforms}
         />
@@ -149,6 +155,7 @@ export default function OrderDashboard() {
         isOpen={isModalOpen} 
         onOpenChange={setIsModalOpen}
         onAccountLinked={handleAccountLinked}
+        linkedPlatforms={linkedPlatforms}
       />
 
       {selectedOrder && (
