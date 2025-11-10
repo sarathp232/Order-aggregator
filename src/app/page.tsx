@@ -18,10 +18,10 @@ export default function LandingPage() {
           </Link>
           <div className="ml-auto flex items-center gap-4">
             <Button asChild variant="ghost">
-              <Link href="/sign-in">Sign In</Link>
+              <Link href="/login">Sign In</Link>
             </Button>
             <Button asChild>
-              <Link href="/sign-up">Sign Up</Link>
+              <Link href="/signup">Sign Up</Link>
             </Button>
           </div>
         </nav>
@@ -41,9 +41,9 @@ export default function LandingPage() {
                     easy-to-use dashboard.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 min-[400px]:flex-row">
+            <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <Button asChild size="lg">
-                    <Link href="/sign-up">Get Started for Free</Link>
+                    <Link href="/signup">Get Started for Free</Link>
                   </Button>
                 </div>
               </div>
