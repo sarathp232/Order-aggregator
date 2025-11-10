@@ -1,9 +1,15 @@
+
 'use server';
 
 import { deduplicateOrders, type DeduplicateOrdersInput } from '@/ai/flows/deduplicate-orders';
 import type { Order } from '@/lib/types';
 
 export async function getDeduplicatedOrders(orders: Order[]): Promise<Order[]> {
+  // If there are no orders or only one, no need to call the AI
+  if (orders.length <= 1) {
+    return orders;
+  }
+  
   const aiInput: DeduplicateOrdersInput = orders.map(o => ({
     orderId: o.orderId,
     platform: o.platform,
@@ -14,34 +20,41 @@ export async function getDeduplicatedOrders(orders: Order[]): Promise<Order[]> {
 
   try {
     const deduplicatedOrdersFromAI = await deduplicateOrders(aiInput);
-
-    const uniqueKey = (o: { orderId: string; platform: string; totalAmount: number }) =>
-      `${o.platform}-${o.orderId}-${o.totalAmount}`;
-      
+    
+    // The AI returns a list of orders it considers unique.
+    // We need to map these back to our original, full Order objects.
     const originalOrdersMap = new Map<string, Order>();
     orders.forEach(o => {
-        // Use a more robust key to handle potential ID collisions across platforms
-        const key = uniqueKey(o);
-        if (!originalOrdersMap.has(key)) {
-            originalOrdersMap.set(key, o);
-        }
+        // Use a composite key to better find the original order later
+        const key = `${o.platform}-${o.orderId}`;
+        originalOrdersMap.set(key, o);
     });
 
-    const result = deduplicatedOrdersFromAI
-      .map(aiOrder => {
-        // Find the original order. The AI might slightly change the total, so we can't do a direct map lookup.
-        // We find the first order that matches platform and ID, assuming the AI preserves these.
-        return orders.find(o => o.platform === aiOrder.platform && o.orderId === aiOrder.orderId);
-      })
-      .filter((o): o is Order => !!o);
+    const result: Order[] = [];
+    const seenInternalIds = new Set<string>();
 
-    // To handle cases where AI might merge and pick one, we ensure no duplicate internal IDs in the final list.
-    const finalDedupedOrders = Array.from(new Map(result.map(o => [o.id, o])).values());
+    deduplicatedOrdersFromAI.forEach(aiOrder => {
+      // The AI might create orders that don't perfectly match, so we need a good way to find the original.
+      // We prioritize platform and orderId.
+      const key = `${aiOrder.platform}-${aiOrder.orderId}`;
+      const originalOrder = originalOrdersMap.get(key);
 
-    return finalDedupedOrders;
+      if (originalOrder && !seenInternalIds.has(originalOrder.id)) {
+        result.push(originalOrder);
+        seenInternalIds.add(originalOrder.id);
+      }
+    });
+
+    // As a fallback if the AI returns an empty list, return the original orders.
+    if (result.length === 0 && orders.length > 0) {
+        return orders;
+    }
+
+    return result;
 
   } catch (error) {
     console.error('Error deduplicating orders with AI:', error);
+    // On error, gracefully fall back to returning the original, unprocessed list.
     return orders;
   }
 }

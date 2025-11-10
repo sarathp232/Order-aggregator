@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -21,15 +22,26 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { PlatformIcon } from './platform-icon';
+import type { Platform } from '@/lib/types';
 
 interface AccountLinkingModalProps {
   isOpen: boolean;
   onOpenChange: (isOpen: boolean) => void;
+  onAccountLinked: (platform: Platform) => void;
 }
 
-export function AccountLinkingModal({ isOpen, onOpenChange }: AccountLinkingModalProps) {
+const platforms: Platform[] = [
+  'Amazon',
+  'eBay',
+  'Shopify',
+  'Flipkart',
+  'Myntra',
+  'Tata CLiQ',
+];
+
+export function AccountLinkingModal({ isOpen, onOpenChange, onAccountLinked }: AccountLinkingModalProps) {
   const { toast } = useToast();
-  const [platform, setPlatform] = React.useState<string>('');
+  const [platform, setPlatform] = React.useState<Platform | ''>('');
 
   const handleLinkAccount = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,9 +53,13 @@ export function AccountLinkingModal({ isOpen, onOpenChange }: AccountLinkingModa
       });
       return;
     }
+    
+    // Pass the newly linked platform back to the parent component
+    onAccountLinked(platform);
+
     toast({
       title: "Account Linked!",
-      description: `Your ${platform} account has been successfully linked.`,
+      description: `Your ${platform} account has been successfully linked. Orders will now appear on your dashboard.`,
     });
     onOpenChange(false);
     setPlatform('');
@@ -56,7 +72,7 @@ export function AccountLinkingModal({ isOpen, onOpenChange }: AccountLinkingModa
           <DialogHeader>
             <DialogTitle>Link Shopping Account</DialogTitle>
             <DialogDescription>
-              Enter your credentials to connect your account. Your information is kept secure.
+              Enter your credentials to connect your account. This is a simulation; no real data is sent.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -64,26 +80,18 @@ export function AccountLinkingModal({ isOpen, onOpenChange }: AccountLinkingModa
               <Label htmlFor="platform" className="text-right">
                 Platform
               </Label>
-              <Select value={platform} onValueChange={setPlatform}>
+              <Select value={platform} onValueChange={(value) => setPlatform(value as Platform)}>
                 <SelectTrigger id="platform" className="col-span-3">
                   <SelectValue placeholder="Select a platform" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Amazon">
-                    <div className="flex items-center gap-2">
-                      <PlatformIcon platform="Amazon" className="h-4 w-4" /> Amazon
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="eBay">
-                    <div className="flex items-center gap-2">
-                      <PlatformIcon platform="eBay" className="h-4 w-4" /> eBay
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="Shopify">
-                    <div className="flex items-center gap-2">
-                      <PlatformIcon platform="Shopify" className="h-4 w-4" /> Shopify Store
-                    </div>
-                  </SelectItem>
+                  {platforms.map((p) => (
+                     <SelectItem key={p} value={p}>
+                        <div className="flex items-center gap-2">
+                          <PlatformIcon platform={p} className="h-4 w-4" /> {p}
+                        </div>
+                      </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

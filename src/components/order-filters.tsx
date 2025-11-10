@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from 'react';
@@ -26,10 +27,12 @@ interface OrderFiltersProps {
   rawCount: number;
   dedupedCount: number;
   isDeduplicating: boolean;
+  linkedPlatforms: Platform[];
 }
 
 const statuses: OrderStatus[] = ['Pending', 'Shipped', 'Delivered', 'Cancelled'];
-const platforms: Platform[] = ['Amazon', 'eBay', 'Shopify'];
+const allPlatforms: Platform[] = ['Amazon', 'eBay', 'Shopify', 'Flipkart', 'Myntra', 'Tata CLiQ'];
+
 
 export function OrderFilters({
   filters,
@@ -40,7 +43,8 @@ export function OrderFilters({
   onShowRawDataChange,
   rawCount,
   dedupedCount,
-  isDeduplicating
+  isDeduplicating,
+  linkedPlatforms,
 }: OrderFiltersProps) {
   const handleFilterChange = (key: 'status' | 'platform', value: string) => {
     onFiltersChange(prev => ({ ...prev, [key]: value }));
@@ -54,6 +58,8 @@ export function OrderFilters({
       const [key, direction] = value.split('-') as [SortKey, SortDirection];
       onSortingChange({key, direction});
   }
+  
+  const availablePlatforms = allPlatforms.filter(p => linkedPlatforms.includes(p));
 
   return (
     <div className="flex flex-col md:flex-row items-center gap-4">
@@ -73,13 +79,13 @@ export function OrderFilters({
           </SelectContent>
         </Select>
 
-        <Select value={filters.platform} onValueChange={(value) => handleFilterChange('platform', value)}>
+        <Select value={filters.platform} onValueChange={(value) => handleFilterChange('platform', value)} disabled={availablePlatforms.length === 0}>
           <SelectTrigger className="w-[150px]">
             <SelectValue placeholder="Platform" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="All">All Platforms</SelectItem>
-            {platforms.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+            {availablePlatforms.map(p => <SelectItem key={p} value={p}>{p}</SelectItem>)}
           </SelectContent>
         </Select>
 
@@ -120,14 +126,14 @@ export function OrderFilters({
         </Select>
       </div>
       <div className="flex items-center space-x-2 md:ml-auto border p-2 rounded-lg bg-card">
-        <Sparkles className={cn("w-5 h-5", isDeduplicating ? 'text-primary animate-pulse' : 'text-muted-foreground')} />
+        <Sparkles className={cn("w-5 h-5", !showRawData ? 'text-primary animate-pulse' : 'text-muted-foreground')} />
         <Label htmlFor="ai-switch" className="flex flex-col">
-            <span className={cn(isDeduplicating ? 'text-primary font-semibold' : 'text-muted-foreground')}>AI Deduplication</span>
+            <span className={cn(!showRawData ? 'text-primary font-semibold' : 'text-muted-foreground')}>AI Deduplication</span>
             <small className='text-muted-foreground'>
-              {isDeduplicating ? `${rawCount - dedupedCount} duplicates removed` : `Showing ${rawCount} raw entries`}
+              {!showRawData ? `${rawCount - dedupedCount} duplicates removed` : `Showing ${rawCount} raw entries`}
             </small>
         </Label>
-        <Switch id="ai-switch" checked={!showRawData} onCheckedChange={(c) => onShowRawDataChange(!c)} />
+        <Switch id="ai-switch" checked={!showRawData} onCheckedChange={onShowRawDataChange} disabled={linkedPlatforms.length === 0} />
       </div>
     </div>
   );

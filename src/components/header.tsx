@@ -1,11 +1,17 @@
+
 "use client";
 
 import * as React from 'react';
 import { Package2, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AccountLinkingModal } from '@/components/account-linking-modal';
+import type { Platform } from '@/lib/types';
 
-export function Header() {
+interface HeaderProps {
+    onAccountLinked: (platform: Platform) => void;
+}
+
+export function Header({ onAccountLinked }: HeaderProps) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   return (
     <>
@@ -26,7 +32,11 @@ export function Header() {
           </div>
         </nav>
       </header>
-      <AccountLinkingModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
+      <AccountLinkingModal 
+        isOpen={isModalOpen} 
+        onOpenChange={setIsModalOpen}
+        onAccountLinked={onAccountLinked}
+      />
     </>
   );
 }
