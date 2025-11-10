@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import * as React from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,14 +15,45 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Package2 } from "lucide-react"
+import { useToast } from "@/hooks/use-toast"
+import { Captcha } from "@/components/captcha"
 
 export default function SignInPage() {
   const router = useRouter()
+  const { toast } = useToast()
+  
+  const [captchaValue, setCaptchaValue] = React.useState("")
+  const [captchaNumbers, setCaptchaNumbers] = React.useState({ num1: 0, num2: 0 })
+
+  React.useEffect(() => {
+    // Generate numbers on client-side to avoid hydration mismatch
+    setCaptchaNumbers({
+      num1: Math.floor(Math.random() * 10) + 1,
+      num2: Math.floor(Math.random() * 10) + 1,
+    })
+  }, [])
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    const expectedAnswer = captchaNumbers.num1 + captchaNumbers.num2;
+    if (parseInt(captchaValue, 10) !== expectedAnswer) {
+      toast({
+        variant: "destructive",
+        title: "Invalid CAPTCHA",
+        description: "Please solve the math problem correctly.",
+      });
+      // Regenerate numbers
+      setCaptchaNumbers({
+        num1: Math.floor(Math.random() * 10) + 1,
+        num2: Math.floor(Math.random() * 10) + 1,
+      });
+      setCaptchaValue("");
+      return;
+    }
+
     // Mock sign in and redirect
-    router.push("/dashboard")
+    router.push("/dashboard/accounts")
   }
 
   return (
@@ -65,6 +97,12 @@ export default function SignInPage() {
               </div>
               <Input id="password" type="password" required />
             </div>
+            <Captcha
+              num1={captchaNumbers.num1}
+              num2={captchaNumbers.num2}
+              value={captchaValue}
+              onChange={(e) => setCaptchaValue(e.target.value)}
+            />
             <Button type="submit" className="w-full">
               Login
             </Button>
