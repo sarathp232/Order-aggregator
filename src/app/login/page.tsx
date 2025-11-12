@@ -30,10 +30,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Login</CardTitle>
+          <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -46,6 +46,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                placeholder="m@example.com"
               />
             </div>
             <div>
@@ -60,6 +61,7 @@ export default function LoginPage() {
                 />
                 <button
                   type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
@@ -67,11 +69,11 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-sm font-medium text-destructive">{error}</p>}
             <Button type="submit" className="w-full">Login</Button>
           </form>
           <p className="mt-4 text-center text-sm">
-            Don't have an account? <Link href="/signup" className="text-blue-600 hover:underline">Sign up</Link>
+            Don't have an account? <Link href="/signup" className="underline">Sign up</Link>
           </p>
         </CardContent>
       </Card>

@@ -11,11 +11,14 @@ export default function DashboardPage() {
   const router = useRouter();
 
   useEffect(() => {
+    // If not loading and no user, redirect to the new login page
     if (!loading && !user) {
       router.push('/login');
     }
   }, [user, loading, router]);
 
+  // While loading or if there is no user, show a skeleton loading state.
+  // The useEffect above will handle the redirection.
   if (loading || !user) {
     return (
       <div className="flex min-h-screen w-full flex-col p-4 md:p-8">
@@ -34,5 +37,6 @@ export default function DashboardPage() {
     );
   }
 
+  // If the user is logged in, render the main dashboard.
   return <OrderDashboard />;
 }
