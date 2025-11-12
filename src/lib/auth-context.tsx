@@ -1,11 +1,15 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from './firebase';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+// Mock User interface, simplified from Firebase User
+interface MockUser {
+  uid: string;
+  email: string;
+}
 
 interface AuthContextType {
-  user: User | null;
+  user: MockUser | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -23,27 +27,47 @@ export const useAuth = () => {
 };
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<MockUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-    return unsubscribe;
+    // Simulate checking for a logged-in user session
+    const session = sessionStorage.getItem('mockUser');
+    if (session) {
+      setUser(JSON.parse(session));
+    }
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    // Simulate a successful login
+    console.log(`Simulating login for ${email}`);
+    // In a real app, you'd validate credentials here.
+    // For the prototype, we'll just create a mock user.
+    if (!email || !password) {
+        throw new Error("Invalid credentials");
+    }
+    const mockUser: MockUser = { uid: 'mock-user-123', email: email };
+    sessionStorage.setItem('mockUser', JSON.stringify(mockUser));
+    setUser(mockUser);
   };
 
   const signup = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(auth, email, password);
+    // Simulate a successful signup and login
+    console.log(`Simulating signup for ${email}`);
+    if (!email || !password) {
+        throw new Error("Failed to create account");
+    }
+    const mockUser: MockUser = { uid: 'mock-user-123', email: email };
+    sessionStorage.setItem('mockUser', JSON.stringify(mockUser));
+    setUser(mockUser);
   };
 
   const logout = async () => {
-    await signOut(auth);
+    // Simulate logout
+    console.log('Simulating logout');
+    sessionStorage.removeItem('mockUser');
+    setUser(null);
   };
 
   const value = {
