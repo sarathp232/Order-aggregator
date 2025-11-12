@@ -10,21 +10,14 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { OrderSchema } from '@/lib/types';
+import type { Order as OrderType } from '@/lib/types';
 
-export const OrderSchema = z.object({
-  orderId: z.string().describe('The unique identifier for the order.'),
-  platform: z.string().describe('The platform where the order was placed (e.g., Amazon, eBay).'),
-  orderDate: z.string().describe('The date the order was placed in ISO format (YYYY-MM-DD).'),
-  totalAmount: z.number().describe('The total amount of the order.'),
-  items: z.array(z.string()).describe('A list of items in the order.'),
-});
 
-export type Order = z.infer<typeof OrderSchema>;
-
-const DeduplicateOrdersInputSchema = z.array(OrderSchema).describe('A list of orders to deduplicate.');
+const DeduplicateOrdersInputSchema = z.array(OrderSchema.pick({ orderId: true, platform: true, orderDate: true, totalAmount: true}).extend({items: z.array(z.string())})).describe('A list of orders to deduplicate.');
 export type DeduplicateOrdersInput = z.infer<typeof DeduplicateOrdersInputSchema>;
 
-const DeduplicateOrdersOutputSchema = z.array(OrderSchema).describe('A list of deduplicated orders.');
+const DeduplicateOrdersOutputSchema = z.array(OrderSchema.pick({ orderId: true, platform: true, orderDate: true, totalAmount: true}).extend({items: z.array(z.string())})).describe('A list of deduplicated orders.');
 export type DeduplicateOrdersOutput = z.infer<typeof DeduplicateOrdersOutputSchema>;
 
 export async function deduplicateOrders(input: DeduplicateOrdersInput): Promise<DeduplicateOrdersOutput> {

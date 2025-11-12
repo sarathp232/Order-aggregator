@@ -1,3 +1,4 @@
+import { z } from 'zod';
 
 export type OrderItem = {
   id: string;
@@ -74,14 +75,24 @@ export type Platform =
   | 'Pepperfry'
   | 'FirstCry';
 
+export const OrderItemSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  quantity: z.number(),
+  price: z.number(),
+  image: z.string().url(),
+  imageHint: z.string(),
+});
 
-export type Order = {
-  id: string; // Internal unique ID
-  orderId: string; // Platform specific order ID
-  platform: Platform;
-  orderDate: string; // ISO string
-  status: OrderStatus;
-  totalAmount: number;
-  items: OrderItem[];
-  shippingAddress: string;
-};
+export const OrderSchema = z.object({
+  id: z.string(),
+  orderId: z.string().describe('The unique identifier for the order.'),
+  platform: z.string().describe('The platform where the order was placed (e.g., Amazon, eBay).'),
+  orderDate: z.string().describe('The date the order was placed in ISO format (YYYY-MM-DD).'),
+  status: z.enum(['Pending', 'Shipped', 'Delivered', 'Cancelled']),
+  totalAmount: z.number().describe('The total amount of the order.'),
+  items: z.array(OrderItemSchema).describe('A list of items in the order.'),
+  shippingAddress: z.string(),
+});
+
+export type Order = z.infer<typeof OrderSchema>;

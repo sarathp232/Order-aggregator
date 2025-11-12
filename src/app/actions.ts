@@ -6,6 +6,7 @@ import {
 } from '@/ai/flows/deduplicate-orders';
 import { generateSampleOrders } from '@/ai/flows/generate-sample-orders';
 import type { Order, Platform } from '@/lib/types';
+import { OrderSchema } from '@/lib/types';
 
 /**
  * Simulates fetching orders for a specific platform by calling an AI flow to generate them.
