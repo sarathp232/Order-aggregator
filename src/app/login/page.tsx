@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Package2 } from 'lucide-react';
 import Link from 'next/link';
+import { Captcha } from '@/components/captcha';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -17,10 +19,38 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const { login } = useAuth();
   const router = useRouter();
+  const { toast } = useToast();
+  
+  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0 });
+  const captchaAnswer = React.useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setCaptcha({
+      num1: Math.floor(Math.random() * 10) + 1,
+      num2: Math.floor(Math.random() * 10) + 1,
+    });
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const answer = captchaAnswer.current?.value;
+    if (parseInt(answer || "0") !== captcha.num1 + captcha.num2) {
+      toast({
+        variant: "destructive",
+        title: "CAPTCHA Failed",
+        description: "Please solve the math problem correctly.",
+      });
+      // Refresh captcha
+      setCaptcha({
+        num1: Math.floor(Math.random() * 10) + 1,
+        num2: Math.floor(Math.random() * 10) + 1,
+      });
+      if(captchaAnswer.current) captchaAnswer.current.value = "";
+      return;
+    }
+
     try {
       await login(email, password);
       router.push('/dashboard');
@@ -30,8 +60,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+       <div className="absolute top-4 left-4">
+            <Link 
+                href="/" 
+                className="flex items-center gap-2 text-lg font-semibold md:text-base text-foreground"
+                aria-label="Back to Homepage"
+            >
+                <Package2 className="h-6 w-6 text-primary" />
+                <span>Order Aggregator</span>
+            </Link>
+        </div>
+      <Card className="w-full max-w-md shadow-2xl">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
@@ -69,6 +109,9 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            <Captcha ref={captchaAnswer} num1={captcha.num1} num2={captcha.num2} />
+
             {error && <p className="text-sm font-medium text-destructive">{error}</p>}
             <Button type="submit" className="w-full">Login</Button>
           </form>

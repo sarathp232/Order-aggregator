@@ -22,7 +22,7 @@ interface OrderDetailsProps {
 export function OrderDetails({ order, isOpen, onOpenChange }: OrderDetailsProps) {
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
-      <SheetContent className="sm:max-w-lg w-full">
+      <SheetContent className="sm:max-w-lg w-full overflow-y-auto">
         <SheetHeader className="text-left">
           <SheetTitle className="text-2xl flex items-center gap-2">
             <PlatformIcon platform={order.platform} className="h-7 w-7" />
@@ -62,13 +62,13 @@ export function OrderDetails({ order, isOpen, onOpenChange }: OrderDetailsProps)
             <TableBody>
               {order.items.map(item => (
                 <TableRow key={item.id}>
-                  <TableCell>
+                  <TableCell className='p-2'>
                     <Image
                       src={item.image}
                       alt={item.name}
                       width={64}
                       height={64}
-                      className="rounded-md object-cover"
+                      className="rounded-md object-cover aspect-square"
                       data-ai-hint={item.imageHint}
                     />
                   </TableCell>

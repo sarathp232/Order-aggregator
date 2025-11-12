@@ -3,8 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Package2 } from 'lucide-react';
 import { LogoCarousel } from '@/components/logo-carousel';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export default function LandingPage() {
+  const dashboardImage = PlaceHolderImages.find(p => p.id === 'feature-1');
+  const aiImage = PlaceHolderImages.find(p => p.id === 'feature-2');
+  const filterImage = PlaceHolderImages.find(p => p.id === 'feature-3');
+
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6 z-10">
@@ -70,7 +77,7 @@ export default function LandingPage() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-3 lg:gap-12">
+            <div className="mx-auto grid max-w-5xl items-start gap-6 py-12 lg:grid-cols-3 lg:gap-12">
               <Card>
                 <CardHeader>
                   <CardTitle>Unified Dashboard</CardTitle>
@@ -79,7 +86,7 @@ export default function LandingPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <img src="https://picsum.photos/seed/dashboard/600/400" alt="Unified Dashboard" className="rounded-md" data-ai-hint="dashboard chart"/>
+                  {dashboardImage && <Image src={dashboardImage.imageUrl} alt="Unified Dashboard" width={600} height={400} className="rounded-md" data-ai-hint={dashboardImage.imageHint} />}
                 </CardContent>
               </Card>
               <Card>
@@ -90,7 +97,7 @@ export default function LandingPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <img src="https://picsum.photos/seed/ai-feature/600/400" alt="AI Feature" className="rounded-md" data-ai-hint="abstract technology"/>
+                  {aiImage && <Image src={aiImage.imageUrl} alt="AI Feature" width={600} height={400} className="rounded-md" data-ai-hint={aiImage.imageHint} />}
                 </CardContent>
               </Card>
               <Card>
@@ -101,7 +108,7 @@ export default function LandingPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <img src="https://picsum.photos/seed/filters/600/400" alt="Filter UI" className="rounded-md" data-ai-hint="ui elements"/>
+                  {filterImage && <Image src={filterImage.imageUrl} alt="Filter UI" width={600} height={400} className="rounded-md" data-ai-hint={filterImage.imageHint} />}
                 </CardContent>
               </Card>
             </div>

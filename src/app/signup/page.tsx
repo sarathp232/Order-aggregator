@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Package2 } from 'lucide-react';
 import Link from 'next/link';
 
 export default function SignupPage() {
@@ -40,8 +40,18 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        <div className="absolute top-4 left-4">
+            <Link 
+                href="/" 
+                className="flex items-center gap-2 text-lg font-semibold md:text-base text-foreground"
+                aria-label="Back to Homepage"
+            >
+                <Package2 className="h-6 w-6 text-primary" />
+                <span>Order Aggregator</span>
+            </Link>
+        </div>
+      <Card className="w-full max-w-md shadow-2xl">
         <CardHeader>
           <CardTitle className="text-2xl">Sign Up</CardTitle>
           <CardDescription>Create a new account to get started</CardDescription>
