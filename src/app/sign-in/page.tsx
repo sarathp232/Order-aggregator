@@ -17,13 +17,18 @@ import { Label } from "@/components/ui/label"
 import { Package2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { Captcha } from "@/components/captcha"
+import { useAuth } from "@/lib/auth-context"
 
 export default function SignInPage() {
   const router = useRouter()
   const { toast } = useToast()
-  
+  const { login } = useAuth()
+
+  const [email, setEmail] = React.useState("")
+  const [password, setPassword] = React.useState("")
   const [captchaValue, setCaptchaValue] = React.useState("")
   const [captchaNumbers, setCaptchaNumbers] = React.useState({ num1: 0, num2: 0 })
+  const [error, setError] = React.useState("")
 
   React.useEffect(() => {
     // Generate numbers on client-side to avoid hydration mismatch
@@ -33,9 +38,10 @@ export default function SignInPage() {
     })
   }, [])
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+    setError("");
+
     const expectedAnswer = captchaNumbers.num1 + captchaNumbers.num2;
     if (parseInt(captchaValue, 10) !== expectedAnswer) {
       toast({
@@ -52,8 +58,12 @@ export default function SignInPage() {
       return;
     }
 
-    // Mock sign in and redirect
-    router.push("/dashboard/accounts")
+    try {
+      await login(email, password);
+      router.push("/dashboard");
+    } catch (err) {
+      setError("Invalid credentials");
+    }
   }
 
   return (
@@ -83,6 +93,8 @@ export default function SignInPage() {
                 type="email"
                 placeholder="m@example.com"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
@@ -95,8 +107,15 @@ export default function SignInPage() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id="password" type="password" required />
+              <Input 
+                id="password" 
+                type="password" 
+                required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
+            {error && <p className="text-destructive text-sm">{error}</p>}
             <Captcha
               num1={captchaNumbers.num1}
               num2={captchaNumbers.num2}
