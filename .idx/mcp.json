@@ -7,8 +7,33 @@
         "firebase-tools@latest",
         "experimental:mcp",
         "--only",
-        "auth,firestore"
-      ]
+        "auth,firestore,hosting,storage"
+      ],
+      "env": {
+        "FIREBASE_PROJECT": "your-project-id",
+        "FIREBASE_TOKEN": "your-auth-token"
+      },
+      "version": "latest"
+    },
+    "gemini": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@google/generative-ai",
+        "mcp",
+        "--model",
+        "gemini-2.5-flash",
+        "--format",
+        "json"
+      ],
+      "env": {
+        "GOOGLE_API_KEY": "AIzaSyBmU0JaiNsmv_zw4MQrZCUoJDzENZePS4A"
+      },
+      "version": "latest"
+    },
+    "gemini server": {
+      "command": "npx",
+      "args": []
     }
   }
 }
